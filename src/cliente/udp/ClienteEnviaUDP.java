@@ -44,6 +44,8 @@ public class ClienteEnviaUDP extends Thread{
                 System.out.println("Mensaje \""+ mensajeMandado +
                         "\" enviado a "+paquete.getAddress() + "#"+paquete.getPort());
             } while (!mensaje.startsWith("fin"));
+            in.close();
+            socket.close();
         }
         catch (Exception e) {
             System.err.println("Exception "+e.getMessage());

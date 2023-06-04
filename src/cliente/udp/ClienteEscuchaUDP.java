@@ -43,6 +43,8 @@ public class ClienteEscuchaUDP extends Thread{
                 System.out.println("Mensaje recibido \""+cadenaMensaje +"\" de "+
                         servPaquete.getAddress()+"#"+servPaquete.getPort());
             } while (!cadenaMensaje.startsWith("fin"));
+
+            socket.close();
         }
         catch (Exception e) {
             e.printStackTrace();
