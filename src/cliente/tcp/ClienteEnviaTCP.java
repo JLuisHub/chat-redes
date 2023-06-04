@@ -36,16 +36,39 @@ public class ClienteEnviaTCP extends Thread{
 
         // Declaramos un bloque try y catch para controlar la ejecución del subprograma
         try {
-            // Creamos un bucle do while en el que enviamos al servidor el mensaje
-            // los datos que hemos obtenido despues de ejecutar la función
-            // "readLine" en la instancia "in"
-            do {
+            while(true){
+
+                System.out.println("1.-Enviar mensaje");
+                System.out.println("2.-Enviar archivo");
+                System.out.print("Entrada: ");
                 mensaje = in.readLine();
-                // enviamos el mensaje codificado en UTF
+
                 out.writeUTF(mensaje);
-                // mientras el mensaje no encuentre la cadena fin, seguiremos ejecutando
-                // el bucle do-while
-            } while (!mensaje.startsWith("fin"));
+
+                if(mensaje.equals("1")){
+                    // Creamos un bucle do while en el que enviamos al servidor el mensaje
+                    // los datos que hemos obtenido despues de ejecutar la función
+                    // "readLine" en la instancia "in"
+                    do{
+                        // enviamos el mensaje codificado en UTF
+                        //System.out.println("\nEnvia un mensaje");
+                        mensaje = in.readLine();
+
+                        sendMessage(mensaje);
+                    }while(!mensaje.startsWith("fin"));
+                    // mientras el mensaje no encuentre la cadena fin, seguiremos ejecutando
+                    // el bucle do-while
+                }
+                else if(mensaje.equals("2")){
+                    mensaje = in.readLine();
+                    sendFile(mensaje);
+                }
+                else break;
+            }
+            
+            out.close();
+            socket.close();
+            in.close();
         }
         // utilizamos el catch para capturar los errores que puedan surgir
         catch (Exception e) {
@@ -54,5 +77,36 @@ public class ClienteEnviaTCP extends Thread{
             System.err.println(e.getMessage());
             System.exit(1);
         }
+    }
+
+    private void sendFile(String path) throws Exception{
+
+        File file = new File(path);
+        FileInputStream fis = new FileInputStream(file);   
+        int size = (int)file.length();
+
+        out.writeInt(size);
+        out.writeUTF(file.getName());
+
+        int byteRead;
+
+        long totalBytes = 0;
+        byte[] buffer = new byte[size];
+
+        while( totalBytes!=size ){
+            byteRead = fis.read(buffer);
+            out.write(buffer, 0, byteRead);
+            totalBytes+=byteRead;
+        }
+
+        System.out.println("\n*********************Archivo enviado**************************\n\n");
+
+        fis.close();
+    }
+
+    private void sendMessage(String message)throws Exception{
+
+        out.writeUTF(message);
+        
     }
 }

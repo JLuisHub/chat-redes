@@ -23,6 +23,7 @@ public class ServidorEscuchaUDP extends Thread{
     public void run() {
         try {
             
+            BufferedReader in = new BufferedReader( new InputStreamReader(System.in) );
             String mensaje ="";
             String mensajeComp ="";
                        
@@ -46,27 +47,13 @@ public class ServidorEscuchaUDP extends Thread{
                 puertoCliente = paquete.getPort();
                 addressCliente = paquete.getAddress();
 
-                if (mensaje.startsWith("fin")) {
-                    mensajeComp="Transmisión con el servidor finalizada...";
-                    enviaMensaje(mensajeComp);
-                }
-                else if (mensaje.startsWith("hola")) {
-                    mensajeComp="¿Cómo estas?";
-                    
-                    //formateamos el mensaje de salida
-                    enviaMensaje(mensajeComp);  
-                }
-                else if (mensaje.startsWith("bien y tú")) {
-                    mensajeComp="También estoy bien, gracias";
-                    
-                    //formateamos el mensaje de salida
-                    enviaMensaje(mensajeComp);
-                }
-                else{
-                    mensajeComp="...";
-                }
+                // Envíamos un paquete
+                mensajeComp = in.readLine();
+                enviaMensaje(mensajeComp);
 
             } while (!mensaje.startsWith("fin"));
+            in.close();
+            socket.close();
         }
         catch (Exception e) {
             System.err.println(e.getMessage());
