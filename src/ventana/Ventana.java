@@ -17,16 +17,20 @@ public class Ventana extends JFrame {
         this.setDefaultCloseOperation(closeOperation);
     }
 
-    public void colocarTexto(String texto){
-        this.elPanel.agregarTextoLabel(texto);
+    public int colocarTexto(String texto){
+        return this.elPanel.agregarTextoLabel(texto);
     }
 
-    public void colocarBoton(String texto){
-        this.elPanel.agregarBoton(texto);
+    public int colocarBoton(String texto){
+        return this.elPanel.agregarBoton(texto);
     }
 
-    public void colocarCajaTexto(int filas, int columnas) {
-        this.elPanel.agregarCajaTexto(filas, columnas);
+    public int colocarCajaTexto(int filas, int columnas) {
+        return this.elPanel.agregarCajaTexto(filas, columnas);
+    }
+
+    public boolean asignarAccionEnvio(int idBoton, int idCajaText) {
+        return this.elPanel.accionEnvioMensaje(idBoton, idCajaText);
     }
 
 }
