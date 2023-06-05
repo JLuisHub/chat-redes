@@ -1,3 +1,4 @@
+import menu.Menu;
 import servidor.tcp.ServidorTCP;
 import servidor.udp.ServidorUDP;
 
@@ -8,13 +9,21 @@ public class MainServidor {
 
         //Iniciar servidor TCP
         ServidorTCP servidorTCP=new ServidorTCP(60000);
-        servidorTCP.inicia();
 
         //Iniciar servirod UDP
         ServidorUDP servidorUDP=new ServidorUDP(50000);
-        servidorUDP.inicia();
 
+        try {
+            servidorTCP.inicia();
+            servidorUDP.inicia();
+        } catch (Exception e) {
+            System.out.println("Error en el servidor");
+            System.exit(0);
+        }
 
+        Menu menuServidor = new Menu();
+
+        menuServidor.start();
 
     }
 }

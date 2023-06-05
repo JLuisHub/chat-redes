@@ -2,6 +2,8 @@ package servidor.udp;
 
 import java.net.*;
 import java.io.*;
+import java.rmi.server.ExportException;
+import java.util.ArrayList;
 
 public class ServidorEscuchaUDP extends Thread{
     protected DatagramSocket socket;
@@ -14,45 +16,38 @@ public class ServidorEscuchaUDP extends Thread{
     protected DatagramPacket paquete;
     protected byte[] mensaje_bytes;
     protected DatagramPacket envPaquete;
+
+    protected ArrayList< InetAddress > addresses;
     
     public ServidorEscuchaUDP(int puertoS) throws Exception{
         //Creamos el socket
-        PUERTO_SERVER=puertoS;
+        PUERTO_SERVER = puertoS;
         socket = new DatagramSocket(puertoS);
+
+        addresses = new ArrayList<InetAddress>();
     }
     public void run() {
         try {
-            
-            BufferedReader in = new BufferedReader( new InputStreamReader(System.in) );
-            String mensaje ="";
-            String mensajeComp ="";
-                       
+            mensaje_bytes=new byte[MAX_BUFFER];
+
+            clientesConectados();
+
+            String mensaje;
             //Iniciamos el bucle
             do {
                 // Recibimos el paquete
-                mensaje_bytes=new byte[MAX_BUFFER];
                 paquete = new DatagramPacket(mensaje_bytes,MAX_BUFFER);
                 socket.receive(paquete);
-                
+
+                // Enviamos al paquete al receptor correspondiente
+                sendPacket(paquete);
+
                 // Lo formateamos
                 mensaje_bytes=new byte[paquete.getLength()];
                 mensaje_bytes=paquete.getData();
                 mensaje = new String(mensaje_bytes,0,paquete.getLength()).trim();
-                
-                // Lo mostramos por pantalla
-                System.out.println("Mensaje recibido \""+mensaje+"\" del cliente "+
-                        paquete.getAddress()+"#"+paquete.getPort());
-                
-                //Obtenemos IP Y PUERTO
-                puertoCliente = paquete.getPort();
-                addressCliente = paquete.getAddress();
-
-                // Envíamos un paquete
-                mensajeComp = in.readLine();
-                enviaMensaje(mensajeComp);
 
             } while (!mensaje.startsWith("fin"));
-            in.close();
             socket.close();
         }
         catch (Exception e) {
@@ -60,17 +55,38 @@ public class ServidorEscuchaUDP extends Thread{
             System.exit(1);
         }
     }
-    private void enviaMensaje(String mensajeComp) throws Exception{
-        mensaje2_bytes = new byte[mensajeComp.length()];
-        mensaje2_bytes = mensajeComp.getBytes();
-    
-        //Preparamos el paquete que queremos enviar
+
+    private void sendPacket(DatagramPacket packet)throws Exception{
+        // Obtenemos el address del emisor
+        addressCliente = packet.getAddress();
+        puertoCliente = packet.getPort();
+
+        // Obtenemos el address del receptor
+        if( addresses.indexOf(addressCliente) == 1 )
+            addressCliente = addresses.get(2);
+
+        // Obtenemos el paquete el emisor
+        mensaje2_bytes = packet.getData();
+
+        //Preparamos el paquete que queremos enviar al receptor
         envPaquete = new DatagramPacket(mensaje2_bytes,mensaje2_bytes.length,addressCliente,puertoCliente);
 
         // realizamos el envio
         socket.send(envPaquete);
-        System.out.println("Mensaje saliente del servidor \""+
-                (new String(envPaquete.getData(),0,envPaquete.getLength()))+
-                "\" al cliente " + addressCliente + ": "+puertoCliente);
+    }
+
+    private void clientesConectados()throws Exception {
+        DatagramPacket paqueteCliente;
+        System.out.println("Clientes conectaods:");
+        while(addresses.size()<2){ // clientes ya estan conectados
+            paqueteCliente = new DatagramPacket(mensaje_bytes,MAX_BUFFER);
+            socket.receive(paqueteCliente);
+            addressCliente = paqueteCliente.getAddress();
+
+            System.out.println("Cliente "+addressCliente);
+
+            addresses.add(addressCliente);
+        }
+        System.out.println("Hay 2 clientec conetados...");
     }
 }

@@ -7,15 +7,21 @@ public class MainCliente {
 
         //Iniciar cliente TCP
         ClienteTCP clienteTCP =new ClienteTCP("127.0.0.1",60000);
-        clienteTCP.inicia();
 
         //Iniciar cliente UDP
         ClienteUDP clienteUDP =new ClienteUDP("127.0.0.1",50000);
-        clienteUDP.inicia();
 
-        Menu menuPrincipal = new Menu();
+        try {
+            clienteUDP.inicia();
+            clienteTCP.inicia();
+        } catch (Exception e) {
+            System.out.println("Error en el cliente");
+            System.exit(0);
+        }
 
-        menuPrincipal.start();
+        Menu menuCliente = new Menu();
+
+        menuCliente.start();
 
     }
 }
