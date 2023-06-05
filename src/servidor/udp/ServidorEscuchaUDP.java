@@ -1,7 +1,6 @@
 package servidor.udp;
 
 import java.net.*;
-import java.io.*;
 
 public class ServidorEscuchaUDP extends Thread{
     protected DatagramSocket socket;
@@ -23,7 +22,6 @@ public class ServidorEscuchaUDP extends Thread{
     public void run() {
         try {
             
-            BufferedReader in = new BufferedReader( new InputStreamReader(System.in) );
             String mensaje ="";
             String mensajeComp ="";
                        
@@ -48,11 +46,10 @@ public class ServidorEscuchaUDP extends Thread{
                 addressCliente = paquete.getAddress();
 
                 // Envíamos un paquete
-                mensajeComp = in.readLine();
+                mensajeComp = in.readLine(); //<-- Aqui va el pedo
                 enviaMensaje(mensajeComp);
 
             } while (!mensaje.startsWith("fin"));
-            in.close();
             socket.close();
         }
         catch (Exception e) {
@@ -60,6 +57,11 @@ public class ServidorEscuchaUDP extends Thread{
             System.exit(1);
         }
     }
+
+    private String obtenerMensaje() {
+
+    }
+
     private void enviaMensaje(String mensajeComp) throws Exception{
         mensaje2_bytes = new byte[mensajeComp.length()];
         mensaje2_bytes = mensajeComp.getBytes();

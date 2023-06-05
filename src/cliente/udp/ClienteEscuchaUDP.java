@@ -5,7 +5,6 @@ import java.io.*;
  
 //declaramos la clase udp escucha
 public class ClienteEscuchaUDP extends Thread{
-    protected BufferedReader in;
     //Definimos el sockets, número de bytes del buffer, y mensaje.
     protected final int MAX_BUFFER=256;
     protected final int PUERTO_CLIENTE;

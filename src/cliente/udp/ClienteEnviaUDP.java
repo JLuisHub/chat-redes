@@ -5,7 +5,6 @@ import java.io.*;
  
 //declaramos la clase udp envia
 public class ClienteEnviaUDP extends Thread{
-    protected BufferedReader in;
     //Definimos el sockets, número de bytes del buffer, y mensaje.
     protected final int MAX_BUFFER=256;
     protected final int PUERTO_SERVER;
@@ -21,7 +20,6 @@ public class ClienteEnviaUDP extends Thread{
     }
     
     public void run() {
-        in = new BufferedReader(new InputStreamReader(System.in));
 
         byte[] mensaje_bytes;
         String mensaje="";
@@ -44,7 +42,6 @@ public class ClienteEnviaUDP extends Thread{
                 System.out.println("Mensaje \""+ mensajeMandado +
                         "\" enviado a "+paquete.getAddress() + "#"+paquete.getPort());
             } while (!mensaje.startsWith("fin"));
-            in.close();
             socket.close();
         }
         catch (Exception e) {
