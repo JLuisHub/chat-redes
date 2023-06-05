@@ -63,7 +63,7 @@ public class ServidorEscuchaUDP extends Thread{
                 // Procesar el texto
                 if (mensaje != null) {
                     // Procesar el mensaje
-                    enviaMensaje(mensajeComp);
+                    enviaMensaje(mensaje);
                 }
 
             } while (!mensaje.startsWith("fin"));
