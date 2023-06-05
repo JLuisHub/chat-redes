@@ -13,10 +13,11 @@ public class MainCliente {
         ventana_principal.colocarBoton("Enviar archivo");
         ventana_principal.colocarBoton("Realizar videollamada");
         int idBtnEnviar = ventana_principal.colocarBoton("Enviar mensaje");
-        ventana_principal.colocarTexto("Mensaje recibido:\n");
+        int idLblMens = ventana_principal.colocarTexto("Mensaje recibido:\n");
 
         //Establecer acciones
         ventana_principal.asignarAccionEnvio(idBtnEnviar, idMensaje);
+        ventana_principal.asignarMostrarTexto(idLblMens);
 
         //Iniciar cliente UDP
         ClienteUDP clienteUDP =new ClienteUDP("127.0.0.1",50000);

@@ -33,4 +33,8 @@ public class Ventana extends JFrame {
         return this.elPanel.accionEnvioMensaje(idBoton, idCajaText);
     }
 
+    public boolean asignarMostrarTexto(int idLabel){
+        return this.elPanel.accionMostrarMensaje(idLabel);
+    }
+
 }

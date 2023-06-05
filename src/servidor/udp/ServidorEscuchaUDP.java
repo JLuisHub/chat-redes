@@ -2,8 +2,12 @@ package servidor.udp;
 
 import ventana.eventos.EnviarMensaje;
 
-import java.net.*;
+import javax.swing.JLabel;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.concurrent.BlockingQueue;
+
 
 public class ServidorEscuchaUDP extends Thread{
     protected DatagramSocket socket;
@@ -16,12 +20,19 @@ public class ServidorEscuchaUDP extends Thread{
     protected DatagramPacket paquete;
     protected byte[] mensaje_bytes;
     protected DatagramPacket envPaquete;
-    
+
+    private static JLabel label;
+
     public ServidorEscuchaUDP(int puertoS) throws Exception{
         //Creamos el socket
         PUERTO_SERVER=puertoS;
         socket = new DatagramSocket(puertoS);
     }
+
+    public static void setLabel(JLabel label) {
+        ServidorEscuchaUDP.label = label;
+    }
+
     public void run() {
         try {
 
@@ -44,9 +55,12 @@ public class ServidorEscuchaUDP extends Thread{
                 mensaje = new String(mensaje_bytes,0,paquete.getLength()).trim();
                 
                 // Lo mostramos por pantalla
-                System.out.println("Mensaje recibido \""+mensaje+"\" del cliente "+
-                        paquete.getAddress()+"#"+paquete.getPort());
-                
+                //System.out.println("Mensaje recibido SEUDP\""+mensaje+"\" del cliente "+
+                //        paquete.getAddress()+"#"+paquete.getPort());
+
+                //Lo mostramos en la interfaz grafica
+                this.label.setText("Mensaje\nSev: "+mensaje);
+
                 //Obtenemos IP Y PUERTO
                 puertoCliente = paquete.getPort();
                 addressCliente = paquete.getAddress();
@@ -84,8 +98,8 @@ public class ServidorEscuchaUDP extends Thread{
 
         // realizamos el envio
         socket.send(envPaquete);
-        System.out.println("Mensaje saliente del servidor \""+
-                (new String(envPaquete.getData(),0,envPaquete.getLength()))+
-                "\" al cliente " + addressCliente + ": "+puertoCliente);
+        //System.out.println("Mensaje saliente del servidor \""+
+        //       (new String(envPaquete.getData(),0,envPaquete.getLength()))+
+        //        "\" al cliente " + addressCliente + ": "+puertoCliente);
     }
 }

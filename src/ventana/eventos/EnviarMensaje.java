@@ -3,9 +3,10 @@ package ventana.eventos;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JTextArea;
 
 public class EnviarMensaje implements ActionListener {
 
@@ -15,9 +16,6 @@ public class EnviarMensaje implements ActionListener {
 
     public EnviarMensaje(JTextArea cajaText){
         this.cajaTexto = cajaText;
-        if (messageQueue == null) {
-            messageQueue = new LinkedBlockingQueue<>();
-        }
     }
 
     @Override
@@ -30,7 +28,6 @@ public class EnviarMensaje implements ActionListener {
         synchronized (lock) {
             lock.notify();
         }
-        System.out.println("Enviar mensaje "+texto);
     }
 
     public static BlockingQueue<String> getMessageQueue() {

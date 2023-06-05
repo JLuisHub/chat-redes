@@ -1,5 +1,7 @@
 package ventana;
 
+import cliente.udp.ClienteEscuchaUDP;
+import servidor.udp.ServidorEscuchaUDP;
 import ventana.eventos.EnviarMensaje;
 
 import java.util.ArrayList;
@@ -58,6 +60,19 @@ public class Panel extends JPanel {
         }
     }
 
+
+    public boolean accionMostrarMensaje(int idLabelTexto){
+        boolean posibleConvertir = true;
+        try {
+            JLabel mensaje  = (JLabel) componentes.get(idLabelTexto);
+            ClienteEscuchaUDP.setLabel(mensaje);
+            ServidorEscuchaUDP.setLabel(mensaje);
+        }catch (Exception e) {
+            posibleConvertir = false;
+        } finally {
+            return posibleConvertir;
+        }
+    }
     public void accionEnviarArchivo() {
         //TODO
     }
