@@ -1,8 +1,10 @@
 package cliente.udp;
 
+import ventana.eventos.EnviarMensaje;
+
 import java.net.*;
-import java.io.*;
- 
+import java.util.concurrent.BlockingQueue;
+
 //declaramos la clase udp envia
 public class ClienteEnviaUDP extends Thread{
     //Definimos el sockets, número de bytes del buffer, y mensaje.
@@ -31,16 +33,31 @@ public class ClienteEnviaUDP extends Thread{
 
         try {
             address=InetAddress.getByName(SERVER);
+
+            BlockingQueue<String> messageQueue = EnviarMensaje.getMessageQueue(); // Obtener la cola de mensajes
+            Object lock = EnviarMensaje.getLock(); // Obtener el objeto de bloqueo
+
             do {
-                mensaje = in.readLine();
-                mensaje_bytes=new byte[mensaje.length()];
-                mensaje_bytes = mensaje.getBytes();
-                paquete = new DatagramPacket(mensaje_bytes,mensaje.length(),address,PUERTO_SERVER);
-                socket.send(paquete);
-                
-                String mensajeMandado=new String(paquete.getData(),0,paquete.getLength()).trim();
-                System.out.println("Mensaje \""+ mensajeMandado +
-                        "\" enviado a "+paquete.getAddress() + "#"+paquete.getPort());
+                synchronized (lock) {
+                    lock.wait();
+                }
+
+                // Obtener el siguiente texto de la cola de mensajes
+                mensaje = messageQueue.poll();
+
+                // Procesar el texto
+                if (mensaje != null) {
+                    // Procesar el mensaje
+                    mensaje_bytes=new byte[mensaje.length()];
+                    mensaje_bytes = mensaje.getBytes();
+                    paquete = new DatagramPacket(mensaje_bytes,mensaje.length(),address,PUERTO_SERVER);
+                    socket.send(paquete);
+
+                    String mensajeMandado=new String(paquete.getData(),0,paquete.getLength()).trim();
+                    System.out.println("Mensaje \""+ mensajeMandado +
+                            "\" enviado a "+paquete.getAddress() + "#"+paquete.getPort());;
+                }
+
             } while (!mensaje.startsWith("fin"));
             socket.close();
         }

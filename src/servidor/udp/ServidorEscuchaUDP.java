@@ -1,6 +1,9 @@
 package servidor.udp;
 
+import ventana.eventos.EnviarMensaje;
+
 import java.net.*;
+import java.util.concurrent.BlockingQueue;
 
 public class ServidorEscuchaUDP extends Thread{
     protected DatagramSocket socket;
@@ -21,7 +24,10 @@ public class ServidorEscuchaUDP extends Thread{
     }
     public void run() {
         try {
-            
+
+            BlockingQueue<String> messageQueue = EnviarMensaje.getMessageQueue(); // Obtener la cola de mensajes
+            Object lock = EnviarMensaje.getLock(); // Obtener el objeto de bloqueo
+
             String mensaje ="";
             String mensajeComp ="";
                        
@@ -46,8 +52,19 @@ public class ServidorEscuchaUDP extends Thread{
                 addressCliente = paquete.getAddress();
 
                 // Envíamos un paquete
-                mensajeComp = in.readLine(); //<-- Aqui va el pedo
-                enviaMensaje(mensajeComp);
+                // Esperar hasta que se reciba un mensaje
+                synchronized (lock) {
+                    lock.wait();
+                }
+
+                // Obtener el siguiente texto de la cola de mensajes
+                mensaje = messageQueue.poll();
+
+                // Procesar el texto
+                if (mensaje != null) {
+                    // Procesar el mensaje
+                    enviaMensaje(mensajeComp);
+                }
 
             } while (!mensaje.startsWith("fin"));
             socket.close();
@@ -56,10 +73,6 @@ public class ServidorEscuchaUDP extends Thread{
             System.err.println(e.getMessage());
             System.exit(1);
         }
-    }
-
-    private String obtenerMensaje() {
-
     }
 
     private void enviaMensaje(String mensajeComp) throws Exception{
