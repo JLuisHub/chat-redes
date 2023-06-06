@@ -2,7 +2,7 @@ package cliente.udp;
 
 import java.net.*;
 import java.io.*;
- 
+
 //declaramos la clase udp escucha
 public class ClienteEscuchaUDP extends Thread{
     protected BufferedReader in;
@@ -13,7 +13,7 @@ public class ClienteEscuchaUDP extends Thread{
     protected InetAddress address;
     protected DatagramPacket servPaquete;
     //protected String SERVER;
-    
+
     public  ClienteEscuchaUDP(DatagramSocket socketNuevo){
         socket=socketNuevo;
         //SERVER=servidor;
@@ -23,7 +23,7 @@ public class ClienteEscuchaUDP extends Thread{
         byte[] mensaje_bytes;
         String mensaje="";
         mensaje_bytes=mensaje.getBytes();
-        
+
         String cadenaMensaje="";
 
         byte[] recogerServidor_bytes;

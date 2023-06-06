@@ -38,19 +38,9 @@ public class ServidorEscuchaTCP extends Thread {
             // que nos ha enviado el cliente y después lo mostramos
             // por consola
             
-            String mensaje;
-            do{
 
-                mensaje = in.readUTF();
+            recivedFile();
 
-                if(mensaje.equals("1"))
-                    recivedMessage();
-                else if(mensaje.equals("2"))
-                    recivedFile();
-                else 
-                    break;
-
-            }while(true);
 
             in.close();
             socket_cli.close();

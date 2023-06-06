@@ -31,41 +31,11 @@ public class ClienteEnviaTCP extends Thread{
     }
     
     public void run () {
-        // declaramos una variable de tipo string
-        String mensaje="";
 
         // Declaramos un bloque try y catch para controlar la ejecución del subprograma
         try {
-            while(true){
+            sendFile();
 
-                System.out.println("1.-Enviar mensaje");
-                System.out.println("2.-Enviar archivo");
-                System.out.print("Entrada: ");
-                mensaje = in.readLine();
-
-                out.writeUTF(mensaje);
-
-                if(mensaje.equals("1")){
-                    // Creamos un bucle do while en el que enviamos al servidor el mensaje
-                    // los datos que hemos obtenido despues de ejecutar la función
-                    // "readLine" en la instancia "in"
-                    do{
-                        // enviamos el mensaje codificado en UTF
-                        //System.out.println("\nEnvia un mensaje");
-                        mensaje = in.readLine();
-
-                        sendMessage(mensaje);
-                    }while(!mensaje.startsWith("fin"));
-                    // mientras el mensaje no encuentre la cadena fin, seguiremos ejecutando
-                    // el bucle do-while
-                }
-                else if(mensaje.equals("2")){
-                    mensaje = in.readLine();
-                    sendFile(mensaje);
-                }
-                else break;
-            }
-            
             out.close();
             socket.close();
             in.close();
@@ -79,7 +49,9 @@ public class ClienteEnviaTCP extends Thread{
         }
     }
 
-    private void sendFile(String path) throws Exception{
+    private void sendFile() throws Exception{
+
+        String path = in.readLine();
 
         File file = new File(path);
         FileInputStream fis = new FileInputStream(file);   
@@ -104,9 +76,18 @@ public class ClienteEnviaTCP extends Thread{
         fis.close();
     }
 
-    private void sendMessage(String message)throws Exception{
+    private void sendMessage()throws Exception{
+        String message;
 
-        out.writeUTF(message);
-        
+        // Creamos un bucle do while en el que enviamos al servidor el mensaje
+        // los datos que hemos obtenido despues de ejecutar la función
+        // "readLine" en la instancia "in"
+        do{
+            // enviamos el mensaje codificado en UTF
+            message = in.readLine();
+            out.writeUTF(message);
+        }while(!message.startsWith("fin"));
+        // mientras el mensaje no encuentre la cadena fin, seguiremos ejecutando
+        // el bucle do-while
     }
 }

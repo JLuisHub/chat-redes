@@ -2,7 +2,7 @@ package cliente.udp;
 
 import java.net.*;
 import java.io.*;
- 
+
 //declaramos la clase udp envia
 public class ClienteEnviaUDP extends Thread{
     protected BufferedReader in;
@@ -13,20 +13,20 @@ public class ClienteEnviaUDP extends Thread{
     protected InetAddress address;
     protected DatagramPacket paquete;
     protected final String SERVER;
-    
+
     public ClienteEnviaUDP(DatagramSocket nuevoSocket, String servidor, int puertoServidor){
         socket = nuevoSocket;
         SERVER=servidor;
         PUERTO_SERVER=puertoServidor;
     }
-    
+
     public void run() {
         in = new BufferedReader(new InputStreamReader(System.in));
 
         byte[] mensaje_bytes;
         String mensaje="";
         mensaje_bytes=mensaje.getBytes();
-        
+
         String cadenaMensaje="";
 
         byte[] RecogerServidor_bytes;
@@ -39,7 +39,7 @@ public class ClienteEnviaUDP extends Thread{
                 mensaje_bytes = mensaje.getBytes();
                 paquete = new DatagramPacket(mensaje_bytes,mensaje.length(),address,PUERTO_SERVER);
                 socket.send(paquete);
-                
+
                 String mensajeMandado=new String(paquete.getData(),0,paquete.getLength()).trim();
                 System.out.println("Mensaje \""+ mensajeMandado +
                         "\" enviado a "+paquete.getAddress() + "#"+paquete.getPort());
