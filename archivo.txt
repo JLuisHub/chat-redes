@@ -1,0 +1,4 @@
+Hola mundo
+Esta es una prueba de como es que puedo enviar archivos de texto en algun    
+servidor para un proyecto de redes
+
