@@ -3,7 +3,7 @@ package servidor.udp;
 import java.net.*;
 import java.io.*;
 
-public class ServidorEnviaUDP extends Thread{
+public class ServidorEscuchaUDP extends Thread{
     protected DatagramSocket socket;
     protected final int PUERTO_SERVER;
     protected int puertoCliente=0;
@@ -15,10 +15,10 @@ public class ServidorEnviaUDP extends Thread{
     protected byte[] mensaje_bytes;
     protected DatagramPacket envPaquete;
 
-    public ServidorEnviaUDP(int puertoS, DatagramSocket socket) throws Exception{
+    public ServidorEscuchaUDP(int puertoS) throws Exception{
         //Creamos el socket
-        this.PUERTO_SERVER=puertoS;
-        this.socket = socket;
+        PUERTO_SERVER=puertoS;
+        socket = new DatagramSocket(puertoS);
     }
     public void run() {
         try {

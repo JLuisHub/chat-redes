@@ -1,10 +1,15 @@
 import cliente.tcp.ClienteTCP;
 import cliente.udp.ClienteUDP;
-import menu.Menu;
+import menu.MenuCliente;
+
+import java.io.BufferedReader;
+
 
 public class MainCliente {
+
     public static void main(String[] args) {
 
+        /*
         //Iniciar cliente TCP
         ClienteTCP clienteTCP =new ClienteTCP("127.0.0.1",60000);
 
@@ -19,7 +24,9 @@ public class MainCliente {
             System.exit(0);
         }
 
-        Menu menuCliente = new Menu();
+         */
+
+        MenuCliente menuCliente = new MenuCliente();
 
         menuCliente.start();
 

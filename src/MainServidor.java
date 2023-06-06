@@ -1,10 +1,12 @@
-import menu.Menu;
+
+import menu.MenuServidor;
 import servidor.tcp.ServidorTCP;
 import servidor.udp.ServidorUDP;
 
 public class MainServidor {
     public static void main(String[] args) {
 
+        /*
         System.out.println("INICIO PROGRAMA");
 
         //Iniciar servidor TCP
@@ -21,9 +23,10 @@ public class MainServidor {
             System.exit(0);
         }
 
-        Menu menuServidor = new Menu();
+         */
+
+        MenuServidor menuServidor = new MenuServidor();
 
         menuServidor.start();
-
     }
 }
