@@ -28,8 +28,6 @@ public class WebCamInputStream extends Thread{
 
     public void run(){
 
-        System.out.println("Iniciando videollamada...");
-
         // Obtener la instancia de la webcam predeterminada
         Webcam webcam = Webcam.getDefault();
         // Configurar la resolución del video
@@ -49,22 +47,34 @@ public class WebCamInputStream extends Thread{
             
             do{
                 image = webcam.getImage();
+
+                if(image == null){
+                    sendPacket("".getBytes());
+                    break;
+                }
+
                 baos = new ByteArrayOutputStream();
 
                 ImageIO.write(image, "JPEG", baos);
                 frameByte = baos.toByteArray();
 
-                packet = new DatagramPacket(frameByte,frameByte.length,address,SERVER_PORT);
-
-                socket.send(packet);
+                sendPacket(frameByte);
 
                 frame.showFrame(image);
             }while(true);
+            webcam.close();
+            socket.close();
         }catch(Exception e){
             System.err.println(e.getMessage());
             System.exit(1);
         }
 
+    }
+
+    public void sendPacket(byte[] frameByte)throws Exception{
+        packet = new DatagramPacket(frameByte,frameByte.length,address,SERVER_PORT);
+
+        socket.send(packet);
     }
 }
 

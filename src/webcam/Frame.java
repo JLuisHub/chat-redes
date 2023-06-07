@@ -26,6 +26,12 @@ public class Frame {
         frame.setSize(image.getWidth(),image.getHeight());
         label.setIcon(new ImageIcon(image));
         frame.repaint();
+        
+    }
+
+    public void close(){
+        frame.setVisible(false);
+        frame.dispose();
     }
     
 }

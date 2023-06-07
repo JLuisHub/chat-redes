@@ -31,12 +31,14 @@ public class MenuServidor {
     }
 
     public void recibirArchivo() throws Exception{
+        System.out.println("Esperando a recibir el archivo...");
         ServidorEscuchaTCP servidorTCP=new ServidorEscuchaTCP(SERVER);
 
         servidorTCP.start();
     }
 
     public void iniciarVideollamada() throws Exception{
+        System.out.println("Estableciendo videollamada...");
         WebCamOutputStream web = new WebCamOutputStream( SERVER );
 
         web.start();

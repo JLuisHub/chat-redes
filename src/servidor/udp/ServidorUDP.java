@@ -1,6 +1,5 @@
 package servidor.udp;
 
-import servidor.udp.ServidorEscuchaUDP;
 import webcam.WebCamOutputStream;
 
 import java.net.DatagramSocket;

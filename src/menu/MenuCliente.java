@@ -35,13 +35,15 @@ public class MenuCliente {
     }
 
     public void enviarArchivo() throws Exception{
+        System.out.println("Dar la ruta del archivo...");
         ClienteEnviaTCP clienteTCP= new ClienteEnviaTCP(SERVER,PORT_SERVER);
         clienteTCP.start();
     }
 
     public void iniciarVideollamada() throws Exception{
+        System.out.println("Estableciendo videollamada...");
         socket = new DatagramSocket();
-        WebCamInputStream web = new WebCamInputStream(socket,SERVER,PORT_SERVER);
+        WebCamInputStream web = new WebCamInputStream(socket,"192.168.0.2",PORT_SERVER);
         web.start();
     }
 

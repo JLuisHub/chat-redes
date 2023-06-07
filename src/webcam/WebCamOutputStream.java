@@ -25,8 +25,6 @@ public class WebCamOutputStream extends Thread{
 
         try{
 
-            System.out.println("Estableciendo videollamada...");
-
             int frameSize;
             byte[] frameByte;
             byte[] imageBytes = new byte[MAX_BUFFER];
@@ -34,7 +32,7 @@ public class WebCamOutputStream extends Thread{
             BufferedImage image;
 
             Frame frame = new Frame();
-            while(true){
+            do{
 
                 packet = new DatagramPacket(imageBytes, imageBytes.length);
                 socket.receive(packet);
@@ -45,7 +43,8 @@ public class WebCamOutputStream extends Thread{
                 image = ImageIO.read( new ByteArrayInputStream(frameByte,0,frameSize) );
 
                 frame.showFrame(image);
-            }
+            }while(frameSize != 0);
+            frame.close();
 
         }catch(Exception e){
             System.err.println(e.getMessage());
